@@ -2,8 +2,10 @@ import os
 import shlex
 import sys
 import textwrap
+from mlflow.server import cdc
 
 from flask import Flask, send_from_directory, Response
+from flask_cors import CORS
 
 from mlflow.server import handlers
 from mlflow.server.handlers import (
@@ -26,7 +28,10 @@ ARTIFACTS_ONLY_ENV_VAR = "_MLFLOW_SERVER_ARTIFACTS_ONLY"
 REL_STATIC_DIR = "js/build"
 
 app = Flask(__name__, static_folder=REL_STATIC_DIR)
-STATIC_DIR = os.path.join(app.root_path, REL_STATIC_DIR)
+CORS(app)	
+
+STATIC_DIR = os.path.join(app.root_path, REL_STATIC_DIR)	
+app.wsgi_app = cdc.SessionRecorderMiddleware(app.wsgi_app, cdc.publish_result_to_kafka)
 
 
 for http_path, handler, methods in handlers.get_endpoints():

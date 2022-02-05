@@ -73,6 +73,8 @@ CORE_REQUIREMENTS = SKINNY_REQUIREMENTS + [
     "numpy",
     "scipy",
     "pandas",
+    "kafka-python",
+    "flask_cors",
     "prometheus-flask-exporter",
     "querystring_parser",
     # Pin sqlparse for: https://github.com/mlflow/mlflow/issues/3433
